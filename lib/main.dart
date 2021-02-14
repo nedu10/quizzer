@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,51 +17,59 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
 
-  var questions = [
+  var _questions = [
     {
       'questionText': 'Where do you currently work?',
       'answerOption': [
-        'Crenet TechLabs',
-        'Pertinence Group',
-        'Realvest',
-        'Crevetal'
+        {'text': 'Crenet TechLabs', 'score': 4},
+        {'text': 'Pertinence Group', 'score': 6},
+        {'text': 'Realvest', 'score': 8},
+        {'text': 'Crevetal', 'score': 2}
       ]
     },
     {
-      'questionText': 'Who is your best crush?',
-      'answerOption': ['Millicent', 'Favour', 'Gika', 'Ruth']
+      'questionText': 'Who is your crush?',
+      'answerOption': [
+        {'text': 'Millicent', 'score': 6},
+        {'text': 'Gika', 'score': 4},
+        {'text': 'Favour', 'score': 2},
+        {'text': 'Ruth', 'score': 8}
+      ]
     },
     {
-      'questionText': 'What is your best primary color?',
+      'questionText': 'What is your favourite primary color?',
       'answerOption': [
-        'Red',
-        'Blue',
-        'Green',
+        {'text': 'Red', 'score': 2},
+        {'text': 'Blue', 'score': 6},
+        {'text': 'Green', 'score': 4},
+        {'text': 'Ruth', 'score': 8}
       ]
     }
   ];
   var _questionNumb = 0;
-  void _changeQuestion() {
-    setState(() {
-      _questionNumb = _questionNumb + 1;
-    });
-    print(_questionNumb);
+  var _totalScore = 0;
+  void _changeQuestion(int score) {
+    _totalScore += score;
+    if (_questionNumb < _questions.length) {
+      setState(() {
+        _questionNumb = _questionNumb + 1;
+      });
+      print(_questionNumb);
+    } else {
+      print('No more questions');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Quizzer'),
-        ),
-        body: Column(children: [
-          Question(questions[_questionNumb]['questionText']),
-          ...(questions[_questionNumb]['answerOption'] as List<String>)
-              .map((e) => Answer(_changeQuestion, e))
-              .toList()
-        ]),
-      ),
+          appBar: AppBar(
+            title: Text('Quizzer'),
+          ),
+          body: _questionNumb < _questions.length
+              ? Quiz(_questions, _changeQuestion, _questionNumb)
+              : Result(_totalScore)),
     );
   }
 }
