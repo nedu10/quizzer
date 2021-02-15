@@ -60,6 +60,13 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void _resetGame() {
+    setState(() {
+      _questionNumb = 0;
+      _totalScore = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           ),
           body: _questionNumb < _questions.length
               ? Quiz(_questions, _changeQuestion, _questionNumb)
-              : Result(_totalScore)),
+              : Result(_totalScore, _resetGame)),
     );
   }
 }
